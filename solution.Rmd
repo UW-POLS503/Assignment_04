@@ -116,13 +116,38 @@ pred_scenarios <- predict(mod3, newdata = scenarios)
 
 - Calculate the following:
 
-    - Difference between the predicted values of the scenarios 1 and 2.
+    - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
+    - `dif3`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
+    - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif6`: Difference between `dif2` and `dif1`.
+    - `dif7`: Difference between `dif3` and `dif1`.
+    
+```{r}
+dif1 <- pred_scenarios[2] - pred_scenarios[1]
+dif2 <- pred_scenarios[4] - pred_scenarios[3]
+dif3 <- pred_scenarios[6] - pred_scenarios[5]
+dif4 <- pred_scenarios[3] - pred_scenarios[1]
+dif5 <- pred_scenarios[5] - pred_scenarios[1]
+dif6 <- dif2 - dif1
+dif7 <- dif3 - dif1
+```
 
+- Explain in your own words what do all these differences represent.
+
+- Create a dataset with all these differences
+```{r}
+differences <- data.frame(dif1, dif2, dif3, 
+                          dif4, dif5, dif6, dif7)
+differences
+```
 
 - Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
 
 ```{r}
 regtab3 <- tidy(mod3)
 regtab3 <- regtab3[c(1,12:nrow(regtab3)),]
+regtab3
 ```
 

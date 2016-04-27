@@ -239,12 +239,48 @@ pred_scenarios &lt;- predict(mod3, newdata = scenarios)</code></pre>
 <ul>
 <li><p>Calculate the following:</p>
 <ul>
-<li>Difference between the predicted values of the scenarios 1 and 2.</li>
+<li><code>dif1</code>: Difference between the predicted values of scenarios 2 and 1: (<code>logUNsun</code> == 1 &amp; <code>avpctBCFE</code> == low) - (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == low).</li>
+<li><code>dif2</code>: Difference between the predicted values of scenarios 2 and 1: (<code>logUNsun</code> == 1 &amp; <code>avpctBCFE</code> == medium) - (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == medium).</li>
+<li><code>dif3</code>: Difference between the predicted values of scenarios 2 and 1: (<code>logUNsun</code> == 1 &amp; <code>avpctBCFE</code> == high) - (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == high).</li>
+<li><code>dif4</code>: Difference between the predicted values of scenarios 3 and 1: (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == medium) - (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == low).</li>
+<li><code>dif5</code>: Difference between the predicted values of scenarios 5 and 1: (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == high) - (<code>logUNsun</code> == 0 &amp; <code>avpctBCFE</code> == low).</li>
+<li><code>dif6</code>: Difference between <code>dif2</code> and <code>dif1</code>.</li>
+<li><code>dif7</code>: Difference between <code>dif3</code> and <code>dif1</code>.</li>
 </ul></li>
-<li><p>Create and print a table showing the <code>mod1</code> coefficients, standard errors, t-statistic and p.value for only the <code>Intercept</code> and the covariates: <code>logUnsun</code>, <code>avpctBCFEcat3</code>, and their interactions.</p></li>
+</ul>
+<pre class="r"><code>dif1 &lt;- pred_scenarios[2] - pred_scenarios[1]
+dif2 &lt;- pred_scenarios[4] - pred_scenarios[3]
+dif3 &lt;- pred_scenarios[6] - pred_scenarios[5]
+dif4 &lt;- pred_scenarios[3] - pred_scenarios[1]
+dif5 &lt;- pred_scenarios[5] - pred_scenarios[1]
+dif6 &lt;- dif2 - dif1
+dif7 &lt;- dif3 - dif1</code></pre>
+<ul>
+<li><p>Explain in your own words what do all these differences represent.</p></li>
+<li><p>Create a dataset with all these differences</p></li>
+</ul>
+<pre class="r"><code>differences &lt;- data.frame(dif1, dif2, dif3, 
+                          dif4, dif5, dif6, dif7)</code></pre>
+<ul>
+<li>Create and print a table showing the <code>mod1</code> coefficients, standard errors, t-statistic and p.value for only the <code>Intercept</code> and the covariates: <code>logUnsun</code>, <code>avpctBCFEcat3</code>, and their interactions.</li>
 </ul>
 <pre class="r"><code>regtab3 &lt;- tidy(mod3)
-regtab3 &lt;- regtab3[c(1,12:nrow(regtab3)),]</code></pre>
+regtab3 &lt;- regtab3[c(1,12:nrow(regtab3)),]
+regtab3</code></pre>
+<pre><code>##                            term    estimate  std.error   statistic
+## 1                   (Intercept) -4.35914077 0.24857807 -17.5363048
+## 12                     logUNsun  0.65070810 0.11036960   5.8957183
+## 13          avpctBCFEcat3medium  0.04524175 0.05091200   0.8886265
+## 14            avpctBCFEcat3high -0.08913526 0.06447025  -1.3825796
+## 15 logUNsun:avpctBCFEcat3medium -0.73078137 0.11457157  -6.3783834
+## 16   logUNsun:avpctBCFEcat3high -0.99833520 0.17212208  -5.8001576
+##         p.value
+## 1  1.118084e-68
+## 12 3.750183e-09
+## 13 3.742074e-01
+## 14 1.667989e-01
+## 15 1.802485e-10
+## 16 6.657977e-09</code></pre>
 </div>
 </div>
 

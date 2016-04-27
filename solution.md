@@ -125,8 +125,33 @@ pred_scenarios <- predict(mod3, newdata = scenarios)
 
 - Calculate the following:
 
-    - Difference between the predicted values of the scenarios 1 and 2.
+    - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
+    - `dif3`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
+    - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif6`: Difference between `dif2` and `dif1`.
+    - `dif7`: Difference between `dif3` and `dif1`.
+    
 
+```r
+dif1 <- pred_scenarios[2] - pred_scenarios[1]
+dif2 <- pred_scenarios[4] - pred_scenarios[3]
+dif3 <- pred_scenarios[6] - pred_scenarios[5]
+dif4 <- pred_scenarios[3] - pred_scenarios[1]
+dif5 <- pred_scenarios[5] - pred_scenarios[1]
+dif6 <- dif2 - dif1
+dif7 <- dif3 - dif1
+```
+
+- Explain in your own words what do all these differences represent.
+
+- Create a dataset with all these differences
+
+```r
+differences <- data.frame(dif1, dif2, dif3, 
+                          dif4, dif5, dif6, dif7)
+```
 
 - Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
 
@@ -134,5 +159,23 @@ pred_scenarios <- predict(mod3, newdata = scenarios)
 ```r
 regtab3 <- tidy(mod3)
 regtab3 <- regtab3[c(1,12:nrow(regtab3)),]
+regtab3
+```
+
+```
+##                            term    estimate  std.error   statistic
+## 1                   (Intercept) -4.35914077 0.24857807 -17.5363048
+## 12                     logUNsun  0.65070810 0.11036960   5.8957183
+## 13          avpctBCFEcat3medium  0.04524175 0.05091200   0.8886265
+## 14            avpctBCFEcat3high -0.08913526 0.06447025  -1.3825796
+## 15 logUNsun:avpctBCFEcat3medium -0.73078137 0.11457157  -6.3783834
+## 16   logUNsun:avpctBCFEcat3high -0.99833520 0.17212208  -5.8001576
+##         p.value
+## 1  1.118084e-68
+## 12 3.750183e-09
+## 13 3.742074e-01
+## 14 1.667989e-01
+## 15 1.802485e-10
+## 16 6.657977e-09
 ```
 

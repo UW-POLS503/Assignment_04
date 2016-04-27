@@ -7,4 +7,6 @@ unnamed-chunk-7	.fitted	aes	augment	geom_smooth	ggplot	logUNsun	mod2	stat_binhex
 unnamed-chunk-8	.fitted	aes	avpctBCFEcat3	geom_smooth	ggplot	logUNsun	pred_mod2	stat_binhex
 unnamed-chunk-9	~	db	lm
 unnamed-chunk-10	[<-	c	data.frame	db	for	mean	mod3	predict	rep
-unnamed-chunk-11	c	mod3	nrow	tidy
+unnamed-chunk-11	pred_scenarios
+unnamed-chunk-12	data.frame	dif1	dif2	dif3	dif4	dif5	dif6	dif7
+unnamed-chunk-13	c	mod3	nrow	tidy
