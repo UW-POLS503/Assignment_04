@@ -105,10 +105,7 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 | 0     | high |
 | 1     | high |
 
-
-**I:** Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
-
-**J:** Calculate the following:
+**I:** Calculate the following:
 
     - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
     - `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
@@ -118,6 +115,8 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
     - `dif6`: Difference between `dif2` and `dif1`.
     - `dif7`: Difference between `dif3` and `dif1`.
  
-**K:** Explain in your own words what do all these differences represent.
+**J:** Explain in your own words what do all these differences represent.
 
-**L:** Create a dataset with all these differences
+**K:** Create a dataset with all these differences
+
+**L:** Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
