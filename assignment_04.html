@@ -168,33 +168,14 @@ install_github(&quot;UW-POLS503/r-pols503&quot;)</code></pre>
               landratio + pciratio + jointdem + laglnrtrade +
               lnrgdpab + lndist + logUNsun * avpctBCFE, 
            data = db)</code></pre>
-<div id="part-a" class="section level3">
-<h3>Part A</h3>
-<ul>
-<li><p>Create a new variable <code>avpctBCFEcat3</code> by splitting the variable <code>avpctBCFE</code> into 3 categories.</p></li>
-<li><p>Run a new version of <code>mod1</code> (<code>mod1b</code>) but in this case ignore the interaction effect between the variables <code>logUNsun</code> and <code>avpctBCFE</code>, and substitute the variable <code>avpctBCFE</code> for the new categorical you just created.</p></li>
-</ul>
-</div>
-<div id="part-b" class="section level3">
-<h3>Part B</h3>
-<ul>
-<li><p>Plot the predicted values of the model <code>mod1b</code> against the covariate <code>logUNsun</code>. Draw a linear regression line on it.</p></li>
-<li><p>If you used <code>geom_point()</code> in the previous plot, you probably saw that there are a lot of data points. Replicat the same plot using <code>stat_binhex()</code> instead of <code>geom_point()</code>. You can find the documentation <a href="http://docs.ggplot2.org/0.9.3/stat_binhex.html">here</a>.</p></li>
-<li><p>Take a look at the plot and at the coefficient for <code>logUNsun</code> in <code>mod1b</code>. What can you say about the relationship betweeh this covariate and the outcome variable <code>lnrtrade</code>?</p></li>
-</ul>
-</div>
-<div id="part-c" class="section level3">
-<h3>Part C</h3>
-<ul>
-<li>Replicate the same plot (<code>logUNsun</code> v. fitted values of <code>mod1b</code>) but in this case use again <code>geom_point()</code> and color the dots differently depending on their values for <code>avpctBCFEcat3</code>. Make sure you also plot 3 different lines describing the relationship between <code>logUNsun</code> and the predicted values of <code>lnrtrade</code> for each group of <code>avpctBCFEcat3</code>. What do you see? How would you interpret this new plot?</li>
-</ul>
-</div>
-<div id="part-d" class="section level3">
-<h3>Part D</h3>
-<ul>
-<li><p>Run a new model (<code>mod3</code>) similar to <code>mod2</code> but in this case interact the variables <code>logUNsun</code> and <code>avpctBCFE</code>.</p></li>
-<li><p>Keeping all the control variables at their means, calculate the predicted values (+ 95% confidence intervals) for the following scenarios:</p></li>
-</ul>
+<p><strong>A:</strong> Create a new variable <code>avpctBCFEcat3</code> by splitting the variable <code>avpctBCFE</code> into 3 categories.</p>
+<p><strong>B:</strong> Run a new version of <code>mod1</code> (<code>mod1b</code>) but in this case ignore the interaction effect between the variables <code>logUNsun</code> and <code>avpctBCFE</code>, and substitute the variable <code>avpctBCFE</code> for the new categorical you just created.</p>
+<p><strong>C:</strong> Plot the predicted values of the model <code>mod1b</code> against the covariate <code>logUNsun</code>. Draw a linear regression line on it.</p>
+<p><strong>D:</strong> If you used <code>geom_point()</code> in the previous plot, you probably saw that there are a lot of data points. Replicate the same plot using <code>stat_binhex()</code> instead of <code>geom_point()</code>. You can find the documentation <a href="http://docs.ggplot2.org/0.9.3/stat_binhex.html">here</a>.</p>
+<p><strong>E:</strong> Take a look at the plot and at the coefficient for <code>logUNsun</code> in <code>mod1b</code>. What can you say about the relationship betweeh this covariate and the outcome variable <code>lnrtrade</code>?</p>
+<p><strong>F:</strong> Replicate the same plot (<code>logUNsun</code> v. fitted values of <code>mod1b</code>) but in this case use again <code>geom_point()</code> and color the dots differently depending on their values for <code>avpctBCFEcat3</code>. Make sure you also plot 3 different lines describing the relationship between <code>logUNsun</code> and the predicted values of <code>lnrtrade</code> for each group of <code>avpctBCFEcat3</code>. What do you see? How would you interpret this new plot?</p>
+<p><strong>G:</strong> Run a new model (<code>mod3</code>) similar to <code>mod2</code> but in this case interact the variables <code>logUNsun</code> and <code>avpctBCFE</code>.</p>
+<p><strong>H:</strong> Keeping all the control variables at their means, calculate the predicted values for the following scenarios:</p>
 <table>
 <thead>
 <tr class="header">
@@ -229,10 +210,17 @@ install_github(&quot;UW-POLS503/r-pols503&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Create and print a table showing the <code>mod1</code> coefficients, standard errors, t-statistic and p.value for only the <code>Intercept</code> and the covariates: <code>logUnsun</code>, <code>avpctBCFEcat3</code>, and their interactions.</li>
-</ul>
-</div>
+<p><strong>I:</strong> Create and print a table showing the <code>mod1</code> coefficients, standard errors, t-statistic and p.value for only the <code>Intercept</code> and the covariates: <code>logUnsun</code>, <code>avpctBCFEcat3</code>, and their interactions.</p>
+<p><strong>J:</strong> Calculate the following:</p>
+<pre><code>- `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 &amp; `avpctBCFE` == low) - (`logUNsun` == 0 &amp; `avpctBCFE` == low).
+- `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 &amp; `avpctBCFE` == medium) - (`logUNsun` == 0 &amp; `avpctBCFE` == medium).
+- `dif3`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 &amp; `avpctBCFE` == high) - (`logUNsun` == 0 &amp; `avpctBCFE` == high).
+- `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 &amp; `avpctBCFE` == medium) - (`logUNsun` == 0 &amp; `avpctBCFE` == low).
+- `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 &amp; `avpctBCFE` == high) - (`logUNsun` == 0 &amp; `avpctBCFE` == low).
+- `dif6`: Difference between `dif2` and `dif1`.
+- `dif7`: Difference between `dif3` and `dif1`.</code></pre>
+<p><strong>K:</strong> Explain in your own words what do all these differences represent.</p>
+<p><strong>L:</strong> Create a dataset with all these differences</p>
 </div>
 
 

@@ -78,29 +78,23 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
            data = db)
 ```
 
-### Part A
 
-- Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
 
-- Run a new version of `mod1` (`mod1b`) but in this case ignore the interaction effect between the variables `logUNsun` and `avpctBCFE`, and substitute the variable `avpctBCFE` for the new categorical you just created.
+**A:** Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
 
-### Part B
+**B:** Run a new version of `mod1` (`mod1b`) but in this case ignore the interaction effect between the variables `logUNsun` and `avpctBCFE`, and substitute the variable `avpctBCFE` for the new categorical you just created.
 
-- Plot the predicted values of the model `mod1b` against the covariate `logUNsun`. Draw a linear regression line on it.
+**C:** Plot the predicted values of the model `mod1b` against the covariate `logUNsun`. Draw a linear regression line on it.
 
-- If you used `geom_point()` in the previous plot, you probably saw that there are a lot of data points. Replicat the same plot using `stat_binhex()` instead of `geom_point()`. You can find the documentation [here](http://docs.ggplot2.org/0.9.3/stat_binhex.html).
+**D:** If you used `geom_point()` in the previous plot, you probably saw that there are a lot of data points. Replicate the same plot using `stat_binhex()` instead of `geom_point()`. You can find the documentation [here](http://docs.ggplot2.org/0.9.3/stat_binhex.html).
 
-- Take a look at the plot and at the coefficient for `logUNsun` in `mod1b`. What can you say about the relationship betweeh this covariate and the outcome variable `lnrtrade`?
+**E:** Take a look at the plot and at the coefficient for `logUNsun` in `mod1b`. What can you say about the relationship betweeh this covariate and the outcome variable `lnrtrade`?
 
-### Part C
+**F:** Replicate the same plot (`logUNsun` v. fitted values of `mod1b`) but in this case use again `geom_point()` and color the dots differently depending on their values for `avpctBCFEcat3`. Make sure you also plot 3 different lines describing the relationship between `logUNsun` and the predicted values of `lnrtrade` for each group of `avpctBCFEcat3`. What do you see? How would you interpret this new plot?
 
-- Replicate the same plot (`logUNsun` v. fitted values of `mod1b`) but in this case use again `geom_point()` and color the dots differently depending on their values for `avpctBCFEcat3`. Make sure you also plot 3 different lines describing the relationship between `logUNsun` and the predicted values of `lnrtrade` for each group of `avpctBCFEcat3`. What do you see? How would you interpret this new plot?
+**G:** Run a new model (`mod3`) similar to `mod2` but in this case interact the variables `logUNsun` and `avpctBCFE`.
 
-### Part D
-
-- Run a new model (`mod3`) similar to `mod2` but in this case interact the variables `logUNsun` and `avpctBCFE`.
-
-- Keeping all the control variables at their means, calculate the predicted values (+ 95% confidence intervals) for the following scenarios:
+**H:** Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
 
 | `logUNsun`     |     `avpctBCFE` |
 |:---------|:-------|
@@ -112,6 +106,18 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 | 1     | high |
 
 
-- Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
+**I:** Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
 
+**J:** Calculate the following:
+
+    - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
+    - `dif3`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
+    - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif6`: Difference between `dif2` and `dif1`.
+    - `dif7`: Difference between `dif3` and `dif1`.
  
+**K:** Explain in your own words what do all these differences represent.
+
+**L:** Create a dataset with all these differences
