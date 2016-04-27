@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Assignment 04</title>
+
+<script src="README_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="README_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="README_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="README_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="README_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="README_files/highlight/default.css"
+      type="text/css" />
+<script src="README_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="README_files/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+$$
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\se}{se}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\mat}[1]{\boldsymbol{#1}}
+\newcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\T}{'}
+
+\newcommand{\distr}[1]{\mathcal{#1}}
+\newcommand{\dnorm}{\distr{N}}
+\newcommand{\dmvnorm}[1]{\distr{N}_{#1}}
+$$
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title">Assignment 04</h1>
+
+</div>
+
+
+<p>Instructions</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://help.github.com/articles/using-pull-requests/">Fork this repository</a> to your GitHub account.</li>
+<li>Write your solutions in R Markdown in a file named <code>index.Rmd</code>.</li>
+<li>Compile your solutions to an HTML file, <code>index.html</code>. You can view it at <code>https://{username}.github.io/Assignment_04</code>.</li>
+<li>When you are ready to submit your assignment, <a href="https://help.github.com/articles/using-pull-requests/#initiating-the-pull-request">initiate a pull request</a>. Title your pull request “Submission”.</li>
+</ol>
+<p>To update your fork from the upstream repository:</p>
+<ol style="list-style-type: decimal">
+<li>On your fork, e.g. <code>https://github.com/jrnold/Assignment_04</code> click on “New Pull request”</li>
+<li>Set your fork <code>jrnold/Assignment_04</code> as the base fork on the left, and <code>UW-POLS503/Assignment_04</code> as the head fork on the right. In both cases the branch will be master. This means, compare any canes in the head fork that are not in the base fork. You will see differences between the <code>US-POLS503</code> repository and your fork. Click on “Create Pull Request”, and if there are no issues, “Click Merge” A quick way is to use this link, but change the <code>jrnold</code> to your own username: <code>https://github.com/jrnold/Assignment_04/compare/gh-pages...UW-POLS504:gh-pages</code>.</li>
+</ol>
+<p>We’ll use these packages,</p>
+<pre class="r"><code>library(&quot;MASS&quot;)
+library(&quot;pols503&quot;)
+library(&quot;foreign&quot;)
+library(&quot;dplyr&quot;)
+library(&quot;broom&quot;)
+library(&quot;ggplot2&quot;)</code></pre>
+<p>These are some utility functions used in this assignment</p>
+<pre class="r"><code>mvnormal_data &lt;- function(n,
+                          mu = 0,
+                          sigma = rep(1, length(mu)),
+                          cor = diag(length(mu)),
+                          empirical = TRUE,
+                          colnames = paste0(&quot;x&quot;, seq_along(mu))
+                          ) {
+  setNames(as.data.frame(MASS::mvrnorm(n, mu = mu,
+                                       sdcor2cov(sigma, cov2cor(cor)),
+                              empirical = empirical)),
+           colnames)
+}</code></pre>
+<p>Given <span class="math inline">\(\hat{\vec{y}}\)</span> and <span class="math inline">\(R^2\)</span> calculate a regression standard deviation,</p>
+<pre class="r"><code>r2_to_sigma &lt;- function (yhat, r2) {
+  ybar &lt;- mean(yhat)
+  ssm &lt;- sum((yhat - ybar)^2)
+  sse &lt;- (1 - r2)/r2 * ssm
+  sqrt(sse/ length(yhat))
+}</code></pre>
+<p>Summarize the results of the simulations:</p>
+<pre class="r"><code>summarize_params &lt;- function(.data) {
+  ret &lt;- .data %&gt;%
+    group_by(term) %&gt;%
+    summarize(estimate_mean = mean(estimate),
+              estimate_sd = sd(estimate),
+              std_error_mean = mean(std.error),
+              std_error_sd = sd(std.error),
+              estimate_mean_se = sd(estimate) / sqrt(n()),
+              estimate_sd_se = sd(estimate) / sqrt(2 * (n() - 1)),
+              std_error_mean_sd = sd(std.error) / sqrt(n()),
+              std_error_sd_se = sd(std.error) / sqrt(2 * (n() - 1)),
+              iter = length(estimate))
+  ret
+}</code></pre>
+<div id="monte-carlo-simulations" class="section level1">
+<h1><span class="header-section-number">1</span> Monte-Carlo Simulations</h1>
+<p>In each question, we will perform a Monte Carlo simulation in which we</p>
+<ol style="list-style-type: decimal">
+<li>draw a sample from a population (that often violates a CLR assumption)</li>
+<li>estimate OLS on that sample</li>
+<li>Repeat steps 1-2 many times to generate a sampling distribution of the coefficients</li>
+<li>Repeat steps 1-3 many for several different populations to understand how the sampling distribution varies with features such as the number of observations in the sample, correlation between covariates, etc.</li>
+</ol>
+<div id="omitted-variables" class="section level2">
+<h2><span class="header-section-number">1.1</span> Omitted Variables</h2>
+<p>Simulate data from: <span class="math display">\[
+Y = X_1 + \beta_2 X_2 + \varepsilon
+\]</span> where <span class="math inline">\(\Cor(X_1, X_2) = \rho\)</span>. However, you estimate a regression with an omitted variable, <span class="math display">\[
+y_i = \hat{\beta}_1 x_{1,i} + \hat\varepsilon
+\]</span></p>
+<p>In these simulations we will vary:</p>
+<ul>
+<li><span class="math inline">\(n\)</span>: The sample size</li>
+<li><span class="math inline">\(rho\)</span>: The correlation between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span></li>
+<li><span class="math inline">\(\beta_2\)</span>: The coefficient on <span class="math inline">\(x_2\)</span></li>
+</ul>
+<pre class="r"><code>simulate_ovb &lt;- function(iter, n, rho, beta2) {
+  n &lt;- 100
+  rho &lt;- 0
+  r2 &lt;- 0.5  
+  beta &lt;- c(0, 1, beta2)
+  cormat &lt;- matrix(c(1, rho, rho, 1), nrow = 2, ncol = 2)
+  dat &lt;- mvnormal_data(n, mu = c(0, 0), cor = cormat)
+  yhat &lt;- model.matrix(~ x1 + x2, data = dat)
+  sigma &lt;- r2_to_sigma(yhat, r2)
+  results &lt;- vector(mode = &quot;list&quot;, length = iter)
+  for (i in seq_len(iter)) {
+    # Simulate y
+    dat[[&quot;y&quot;]] &lt;- yhat + rnorm(n, sd = sigma)
+    # Estimate OLS
+    results &lt;- tidy(lm(y ~ x1, data = dat))
+  }
+  summarize_params(results)
+}
+
+sims_ovb &lt;-
+  expand.grid(rho = c(0, 0.3, .7),
+              beta2 = c(1, 0.5, 0),
+              obs = c(30, 100, 1000)) %&gt;%
+  group_by(rho, beta2, obs) %&gt;%
+  do({
+    simulate_ovb(2048, n = .$obs, rho = .$rho, beta2 = .$beta2)
+  })
+save(sims_ovb, file = &quot;data/sims_ovb.RData&quot;)</code></pre>
+<p>Use the simulation results to answer the following questions. Use plots in your answers. How do the values of <span class="math inline">\(n\)</span>, <span class="math inline">\(\rho\)</span>, and <span class="math inline">\(\beta_2\)</span> affect the following:</p>
+<ul>
+<li>Bias of <span class="math inline">\(\hat{beta}_1\)</span>, <span class="math inline">\(E(\hat{\beta}_1) - \beta_1\)</span></li>
+<li>The standard deviation of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\sd(\hat{\beta})\)</span>.</li>
+<li>The bias of the standard error of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\E(\se(\hat{\beta}_1)) - \sd(\hat{\beta}_1)\)</span></li>
+</ul>
+</div>
+<div id="measurement-error" class="section level2">
+<h2><span class="header-section-number">1.2</span> Measurement Error</h2>
+<p>Population regression function <span class="math display">\[
+Y = \beta_0 + \beta_1 \vec{x}_1 + \beta_2 + \varepsilon
+\]</span> where <span class="math inline">\(\E(\vec{x}_1) = \E(\vec{x}_2) = 0\)</span>, <span class="math inline">\(\Var(\vec{x}_1) = \Var(\vec{x}_2) = 1\)</span>, and <span class="math inline">\(\Cov(\vec{x}_1, \vec{x}_2) = \rho\)</span>.</p>
+<p>The sample regression function is <span class="math display">\[
+y_i = \hat\beta_0 + \hat\beta_1 z_{1,i} + \hat\beta_2 z_{2,i} + \varepsilon
+\]</span> Instead of observing variables <span class="math inline">\(x_{1,i}\)</span> (<span class="math inline">\(x_{2,i}\)</span>) we observe <span class="math inline">\(z_{1,i}\)</span> (<span class="math inline">\(z_{2,i}\)</span>), which is <span class="math inline">\(z_{1,i}\)</span> (<span class="math inline">\(z_{2,i}\)</span>) with measurement error, <span class="math display">\[
+\begin{aligned}[t]
+z_{1,i} = x_{1,i} + \delta_{i,i} \\
+z_{2,i} = x_{2,i} + \delta_{2,i}
+\end{aligned}
+\]</span> where <span class="math inline">\(\delta_{1,i} \sim N(0, \tau_1)\)</span> and <span class="math inline">\(\delta_{2,i} \sim N(0, \tau_1)\)</span>. The measurement errors are uncorrelated with the <span class="math inline">\(x\)</span>’s and <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Rather than vary the variances of <span class="math inline">\(\tau\)</span> between simulations, we will focus on the reliability of each variable. The reliability is the ratio between the variance of <span class="math inline">\(x\)</span> and <span class="math inline">\(z\)</span>. Since in this case, the variance of the <span class="math inline">\(x\)</span>’s is 1, the reliability is <span class="math display">\[
+r = 1 / 1 + \tau^2
+\]</span> When the reliability is 1, there is no measurement error. As the relability goes to zero, there the measurement error overwhelms the variable.</p>
+<p>In these simulations we will vary</p>
+<ul>
+<li><span class="math inline">\(n\)</span>: The sample size</li>
+<li><span class="math inline">\(r_1\)</span>: The reliability of <span class="math inline">\(x_1\)</span></li>
+<li><span class="math inline">\(r_2\)</span>: The reliability of <span class="math inline">\(x_2\)</span></li>
+<li><span class="math inline">\(\rho\)</span>: The correlation between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span></li>
+</ul>
+<pre class="r"><code>simulate_measurement_error &lt;- function(iter, n, rho, reliability) {
+  # Regression coefficients
+  beta &lt;- c(0, 1, 1)
+  # Correlation between X
+  cormat &lt;- matrix(c(1, rho, rho, 1), nrow = 2, ncol = 2)
+  # desired population R^2 (used to generate sigma)
+  r2 &lt;- 0.5
+  # X drawn from a multivariate normal distribution
+  dat &lt;- mvnormal_data(n, mu = c(0, 0), cor = cormat)
+  # yhat = X b
+  yhat &lt;- model.matrix(~ x1 + x2, data = dat) %*% beta
+  # Regression standard deviation
+  sigma &lt;- r2_to_sigma(yhat, r2)
+  results &lt;- vector(mode = &quot;list&quot;, length = iter)
+  meas_sd &lt;- sqrt((1 - reliability) / reliability)
+  dat2 &lt;- dat
+  for (i in seq_len(iter)) {
+    # Simulate y
+    dat2[[&quot;y&quot;]] &lt;- yhat + rnorm(n, sd = sigma)
+    for (j in 1:2) {    
+      dat2[[paste0(&quot;x&quot;, j)]] &lt;- dat[[paste0(&quot;x&quot;, j)]] + rnorm(n, sd = meas_sd[j])  
+    }
+    # Estimate OLS
+    results &lt;- tidy(lm(y ~ x1 + x2, data = dat2))
+  }
+  summarize_params(results)
+}
+
+sims_measurement_error &lt;-
+  expand.grid(reliability1 = c(.01, .7, 1),
+              reliability2 = c(.01, .7, 1),
+              rho = c(0, 0.3, .7),
+              obs = c(30, 100, 1000)) %&gt;%
+  group_by(rho, obs, reliability1, reliability2) %&gt;%
+  do({
+    simulate_measurement_error(2048,
+                          rho = .$rho,
+                          n = .$obs,
+                          reliability = c(.$reliability1,
+                                          .$reliability2))
+  })
+save(sims_measurement_error, file = &quot;data/sims_measurement_error.RData&quot;)</code></pre>
+<p>Use the simulation results to answer the following questions. Use plots in your answers. How do the values of <span class="math inline">\(n\)</span>, <span class="math inline">\(r_1\)</span>, <span class="math inline">\(r_2\)</span>, and <span class="math inline">\(\rho\)</span> affect the following:</p>
+<ul>
+<li><p>Bias of <span class="math inline">\(\hat{beta}_1\)</span>, <span class="math inline">\(E(\hat{\beta}_1) - \beta_1\)</span>. In particular, focus on the following cases:</p></li>
+<li>The bias of <span class="math inline">\(\hat\beta_{1}\)</span> changes with <span class="math inline">\(r_1\)</span> when <span class="math inline">\(r_2 = 1\)</span></li>
+<li>The bias of <span class="math inline">\(\hat\beta_{2}\)</span> changes with <span class="math inline">\(r_2\)</span> when <span class="math inline">\(r_2 = 1\)</span></li>
+<li><p>The bias of <span class="math inline">\(\hat\beta_{1}\)</span> changes with <span class="math inline">\(r_2\)</span> when <span class="math inline">\(x_1\)</span> has some measurement error, <span class="math inline">\(r_1 &lt; 1\)</span>.</p></li>
+<li>The standard deviation of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\sd(\hat{\beta})\)</span>.</li>
+<li><p>The bias of the standard error of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\E(\se(\hat{\beta}_1)) - \sd(\hat{\beta}_1)\)</span></p></li>
+</ul>
+</div>
+<div id="multi-collinearity" class="section level2">
+<h2><span class="header-section-number">1.3</span> Multi-collinearity</h2>
+<p>In these simulations our population is <span class="math display">\[
+Y = \beta_0 + \beta_1 \vec{x}_1 + \beta_2 + \varepsilon
+\]</span> where <span class="math inline">\(\E(\vec{x}_1) = \E(\vec{x}_2) = 0\)</span>, <span class="math inline">\(\Var(\vec{x}_1) = \Var(\vec{x}_2) = 1\)</span>, and <span class="math inline">\(\Cov(\vec{x}_1, \vec{x}_2) = \rho\)</span>. We also estimate the correct regression for each sample, <span class="math display">\[
+Y = \beta_0 + \beta_1 \vec{x}_1 + \beta_2 + \varepsilon
+\]</span></p>
+<p>In these simulations we will vary:</p>
+<ul>
+<li><span class="math inline">\(n\)</span>: The sample size</li>
+<li><span class="math inline">\(rho\)</span>: The correlation between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span></li>
+</ul>
+<pre class="r"><code>simulate_multicollinearity &lt;- function(iter, n, rho) {
+  beta &lt;- c(0, 1, 1)
+  r2 &lt;- 0.5  
+  cormat &lt;- matrix(c(1, rho, rho, 1), nrow = 2, ncol = 2)
+  dat &lt;- mvnormal_data(n, mu = c(0, 0), cor = cormat)
+  yhat &lt;- model.matrix(~ x1 + x2, data = dat) %*% beta
+  sigma &lt;- r2_to_sigma(yhat, r2)
+  results &lt;- vector(mode = &quot;list&quot;, length = iter)
+  for (i in seq_len(iter)) {
+    # Simulate y
+    dat[[&quot;y&quot;]] &lt;- yhat + rnorm(n, sd = sigma)
+    # Estimate OLS
+    results &lt;- tidy(lm(y ~ x1 + x2, data = dat))
+  }
+  summarize_params(results)
+}
+
+sims_multicollinearity &lt;- expand.grid(rho = c(0, 0.7, 0.95),
+            obs = c(30, 100, 1000)) %&gt;%
+  group_by(rho, obs) %&gt;%
+  do({
+    simulate_multicollinearity(2048, rho = .$rho, n = .$obs)
+  })
+save(sims_multicollinearity, file = &quot;data/sims_multicollinearity.RData&quot;)</code></pre>
+<p>Use the simulation results to answer the following questions. Use plots in your answers. How do the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(\rho\)</span> affect the following?</p>
+<ul>
+<li>Bias of <span class="math inline">\(\hat{beta}_1\)</span>, <span class="math inline">\(E(\hat{\beta}_1) - \beta_1\)</span>. In particular, focus on the following cases:</li>
+<li>The standard deviation of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\sd(\hat{\beta})\)</span>.</li>
+<li>The bias of the standard error of <span class="math inline">\(\hat{\beta}_1\)</span>, i.e. <span class="math inline">\(\E(\se(\hat{\beta}_1)) - \sd(\hat{\beta}_1)\)</span></li>
+</ul>
+</div>
+</div>
+<div id="more-nunn-and-wantchekon-2011" class="section level1">
+<h1><span class="header-section-number">2</span> More Nunn and Wantchekon (2011)</h1>
+<ol style="list-style-type: decimal">
+<li>How do Nunn and Wantchekon handle omitted variable bias? Replicate their calculations for at least one regression?</li>
+<li>How would measurement error problems in the measure of trust used by Wantchekon affect their estimate of the effect of slave exports on trust? In their measures of slave exports? In the control variables?</li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
