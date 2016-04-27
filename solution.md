@@ -1,0 +1,138 @@
+# Assignment 04
+Solutions  
+
+
+```r
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
+
+Libraries Used
+
+```r
+library("pols503")
+library("rio")
+library("ggplot2")
+library("dplyr")
+library("broom")
+library("xtable")
+```
+
+# Data
+
+
+```r
+db <- import("TradeConflict.dta")
+```
+
+# Model 1
+
+This model is similar to their Model 1 in Table 1 (p. 676):
+
+```r
+mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island + 
+              landratio + pciratio + jointdem + laglnrtrade +
+              lnrgdpab + lndist + logUNsun * avpctBCFE, 
+           data = db)
+```
+
+### Part A
+
+- Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
+
+
+```r
+db <- mutate(db, avpctBCFEcat3 = cut(x = avpctBCFE, breaks = 3, 
+                                     labels = c("low", "medium", "high")))
+```
+
+- Run a new version of `mod1` (`mod1b`) but in this case ignore the interaction effect between the variables `logUNsun` and `avpctBCFE`, and substitute the variable `avpctBCFE` for the new categorical you just created.
+
+
+```r
+mod2 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island + 
+              landratio + pciratio + jointdem + laglnrtrade +
+              lnrgdpab + lndist + logUNsun + avpctBCFEcat3, 
+           data = db)
+```
+
+### Part B
+
+- Plot the predicted values of the model `mod1b` against the covariate `logUNsun`. Draw a linear regression line on it.
+
+```r
+pred_mod2 <- augment(mod2)
+ggplot(pred_mod2, aes(x = logUNsun, y = .fitted)) + 
+  stat_binhex() +
+  geom_smooth(method = "lm")
+```
+
+![](solution_files/figure-html/unnamed-chunk-7-1.png)
+
+- If you used `geom_point()` in the previous plot, you probably saw that there are a lot of data points. Replicat the same plot using `stat_binhex()` instead of `geom_point()`. You can find the documentation [here](http://docs.ggplot2.org/0.9.3/stat_binhex.html).
+
+- Take a look at the plot and at the coefficient for `logUNsun` in `mod1b`. What can you say about the relationship betweeh this covariate and the outcome variable `lnrtrade`?
+
+### Part C
+
+- Replicate the same plot (`logUNsun` v. fitted values of `mod1b`) but in this case use again `geom_point()` and color the dots differently depending on their values for `avpctBCFEcat3`. Make sure you also plot 3 different lines describing the relationship between `logUNsun` and the predicted values of `lnrtrade` for each group of `avpctBCFEcat3`. What do you see? How would you interpret this new plot?
+
+
+```r
+ggplot(pred_mod2, aes(x = logUNsun, y = .fitted, fill = avpctBCFEcat3)) + 
+  stat_binhex(alpha = 0.6) +
+  geom_smooth(method = "lm", aes(color = avpctBCFEcat3), lwd = 2, se = FALSE)
+```
+
+![](solution_files/figure-html/unnamed-chunk-8-1.png)
+
+### Part D
+
+- Run a new model (`mod3`) similar to `mod2` but in this case interact the variables `logUNsun` and `avpctBCFE`.
+
+
+```r
+mod3 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island + 
+              landratio + pciratio + jointdem + laglnrtrade +
+              lnrgdpab + lndist + logUNsun * avpctBCFEcat3, 
+           data = db)
+```
+
+- Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
+
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 | 0     | low |
+| 2 | 1     | low |
+| 3 | 0     | medium |
+| 4 | 1     | medium |
+| 5 | 0     | high |
+| 6 | 1     | high |
+
+
+
+```r
+controls <- c("lnrpciab", "avremote", "landlocked", "island", 
+              "landratio", "pciratio", "jointdem", "laglnrtrade",
+              "lnrgdpab", "lndist")
+scenarios <- data.frame(logUNsun = rep(c(0,1), 3),
+                        avpctBCFEcat3 = c(rep("low", 2), rep("medium", 2),
+                                      rep("high", 2)))
+for (var in controls) {
+  scenarios[,var] <- mean(db[,var], na.rm = TRUE)
+}
+pred_scenarios <- predict(mod3, newdata = scenarios)
+```
+
+- Calculate the following:
+
+    - Difference between the predicted values of the scenarios 1 and 2.
+
+
+- Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
+
+
+```r
+regtab3 <- tidy(mod3)
+regtab3 <- regtab3[c(1,12:nrow(regtab3)),]
+```
+
