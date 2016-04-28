@@ -150,7 +150,7 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 | 10 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.0)` |
 | 11 |`min(logUNsun)`     | `quantile(avpctBCFE, 0.05)` |
 | ... | ...     | `quantile(avpctBCFE, 0.05)` |
-| 20 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.5)` |
+| 20 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.05)` |
 | 201 |`min(logUNsun)`     | `quantile(avpctBCFE, 1)` |
 | ... | ...     | `quantile(avpctBCFE, 1)` |
 | 210 | `max(logUNsun)`     | `quantile(avpctBCFE, 1)` |
