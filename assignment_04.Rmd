@@ -62,7 +62,7 @@ Dependent Variable:
 
 Independent Variables of interest:
 
-  - **Conflict** (`logUNsun`): Whether two countries have similar voting patterns in the UN General Assembly. 1 (most similar) to 3 (most dissimilar) scale.
+  - **Conflict** (`logUNsun`): Whether two countries have similar voting patterns in the UN General Assembly. The log of a 1-3 scale, where 1 = `most similar' and 3 = `most dissimilar'.
   
   - **Trade Barriers** (`avpctBCFE`): Trade Barriers as a proxy for the domestic political power of economic elites with internationalist economic interests. Logged form of the Hiscox and Kastner (2002) index that evaluates trade barriers. Higher numbers mean more closed trade policies, range: {1.61 , 60.53}.
 
@@ -96,14 +96,14 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 
 **H:** Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
 
-| `logUNsun`     |     `avpctBCFE` |
-|:---------|:-------|
-| 0     | low |
-| 1     | low |
-| 0     | medium |
-| 1     | medium |
-| 0     | high |
-| 1     | high |
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 | 0     | low |
+| 2 | 1     | low |
+| 3 | 0     | medium |
+| 4 | 1     | medium |
+| 5 | 0     | high |
+| 6 | 1     | high |
 
 **I:** Calculate the following:
 
@@ -120,3 +120,19 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 **K:** Create a dataset with all these differences
 
 **L:** Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
+
+**M:** Compare the coefficients to the `differences` you previously calculated. Can you now interpret the coefficients?
+
+**N:** Predict the following 300 scenarios:
+
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 |`min(logUNsun)`     | low |
+| ... | ...     | low |
+| 100 | `max(logUNsun)`     | low |
+| 101 |`min(logUNsun)`     | medium |
+| ... | ...     | medium |
+| 200 | `max(logUNsun)`     | medium |
+| 201 |`min(logUNsun)`     | high |
+| ... | ...     | high |
+| 300 | `max(logUNsun)`     | high |

@@ -35,9 +35,7 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
            data = db)
 ```
 
-### Part A
-
-- Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
+**A:** Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
 
 
 ```r
@@ -45,7 +43,7 @@ db <- mutate(db, avpctBCFEcat3 = cut(x = avpctBCFE, breaks = 3,
                                      labels = c("low", "medium", "high")))
 ```
 
-- Run a new version of `mod1` (`mod1b`) but in this case ignore the interaction effect between the variables `logUNsun` and `avpctBCFE`, and substitute the variable `avpctBCFE` for the new categorical you just created.
+**B:** Run a new version of `mod1` (`mod2`) but in this case ignore the interaction effect between the variables `logUNsun` and `avpctBCFE`, and substitute the variable `avpctBCFE` for the new categorical you just created.
 
 
 ```r
@@ -55,9 +53,8 @@ mod2 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
            data = db)
 ```
 
-### Part B
+**C:** Plot the predicted values of the model `mod2` against the covariate `logUNsun`. Draw a linear regression line on it.
 
-- Plot the predicted values of the model `mod1b` against the covariate `logUNsun`. Draw a linear regression line on it.
 
 ```r
 pred_mod2 <- augment(mod2)
@@ -68,13 +65,13 @@ ggplot(pred_mod2, aes(x = logUNsun, y = .fitted)) +
 
 ![](solution_files/figure-html/unnamed-chunk-7-1.png)
 
-- If you used `geom_point()` in the previous plot, you probably saw that there are a lot of data points. Replicat the same plot using `stat_binhex()` instead of `geom_point()`. You can find the documentation [here](http://docs.ggplot2.org/0.9.3/stat_binhex.html).
+**D:** If you used `geom_point()` in the previous plot, you probably saw that there are a lot of data points. Replicate the same plot using `stat_binhex()` instead of `geom_point()`. You can find the documentation [here](http://docs.ggplot2.org/0.9.3/stat_binhex.html).
 
-- Take a look at the plot and at the coefficient for `logUNsun` in `mod1b`. What can you say about the relationship betweeh this covariate and the outcome variable `lnrtrade`?
 
-### Part C
 
-- Replicate the same plot (`logUNsun` v. fitted values of `mod1b`) but in this case use again `geom_point()` and color the dots differently depending on their values for `avpctBCFEcat3`. Make sure you also plot 3 different lines describing the relationship between `logUNsun` and the predicted values of `lnrtrade` for each group of `avpctBCFEcat3`. What do you see? How would you interpret this new plot?
+**E:** Take a look at the plot and at the coefficient for `logUNsun` in `mod1b`. What can you say about the relationship betweeh this covariate and the outcome variable `lnrtrade`?
+
+**F:** Replicate the same plot (`logUNsun` v. fitted values of `mod1b`) but in this case use again `geom_point()` and color the dots differently depending on their values for `avpctBCFEcat3`. Make sure you also plot 3 different lines describing the relationship between `logUNsun` and the predicted values of `lnrtrade` for each group of `avpctBCFEcat3`. What do you see? How would you interpret this new plot?
 
 
 ```r
@@ -85,9 +82,7 @@ ggplot(pred_mod2, aes(x = logUNsun, y = .fitted, fill = avpctBCFEcat3)) +
 
 ![](solution_files/figure-html/unnamed-chunk-8-1.png)
 
-### Part D
-
-- Run a new model (`mod3`) similar to `mod2` but in this case interact the variables `logUNsun` and `avpctBCFE`.
+**G:** Run a new model (`mod3`) similar to `mod2` but in this case interact the variables `logUNsun` and `avpctBCFE`.
 
 
 ```r
@@ -97,7 +92,7 @@ mod3 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
            data = db)
 ```
 
-- Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
+**H:** Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
 
 | # | `logUNsun`     |     `avpctBCFE` |
 |:----|:---------|:-------|
@@ -123,11 +118,11 @@ for (var in controls) {
 pred_scenarios <- predict(mod3, newdata = scenarios)
 ```
 
-- Calculate the following:
+**I:** Calculate the following:
 
     - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
-    - `dif2`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
-    - `dif3`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
+    - `dif2`: Difference between the predicted values of scenarios 4 and 3: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
+    - `dif3`: Difference between the predicted values of scenarios 6 and 5: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
     - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == low).
     - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == low).
     - `dif6`: Difference between `dif2` and `dif1`.
@@ -143,17 +138,35 @@ dif5 <- pred_scenarios[5] - pred_scenarios[1]
 dif6 <- dif2 - dif1
 dif7 <- dif3 - dif1
 ```
+ 
+**J:** Explain in your own words what do all these differences represent.
 
-- Explain in your own words what do all these differences represent.
+  - `dif1`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == low.
+  - `dif2`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == medium.
+  - `dif3`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == high.
+  - `dif4`: The difference in `lnrtrade` between dyads where `avpctBCFE` is low and dyads where `avpctBCFE` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
+  - `dif5`: The difference in `lnrtrade` between dyads where `avpctBCFE` is low and dyads where `avpctBCFE` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
+  - `dif6`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFE` is medium and `avpctBCFE` is low 
+  - `dif7`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFE` is high and `avpctBCFE` is low 
+  
+**K:** Create a dataset (`differences`) with all these differences
 
-- Create a dataset with all these differences
 
 ```r
 differences <- data.frame(dif1, dif2, dif3, 
                           dif4, dif5, dif6, dif7)
+differences
 ```
 
-- Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
+```
+##        dif1        dif2       dif3       dif4        dif5       dif6
+## 2 0.6507081 -0.08007327 -0.3476271 0.04524175 -0.08913526 -0.7307814
+##         dif7
+## 2 -0.9983352
+```
+
+**L:** Create and print a table showing the `mod1` coefficients, standard errors, t-statistic and p.value for only the `Intercept` and the covariates: `logUnsun`, `avpctBCFEcat3`, and their interactions. 
+
 
 
 ```r
@@ -178,4 +191,21 @@ regtab3
 ## 15 1.802485e-10
 ## 16 6.657977e-09
 ```
+
+**M:** Compare the coefficients to the `differences` you previously calculated. Can you now interpret the coefficients?
+
+**N:** Predict the following 300 scenarios:
+
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 |`min(logUNsun)`     | low |
+| ... | ...     | low |
+| 100 | `max(logUNsun)`     | low |
+| 101 |`min(logUNsun)`     | medium |
+| ... | ...     | medium |
+| 200 | `max(logUNsun)`     | medium |
+| 201 |`min(logUNsun)`     | high |
+| ... | ...     | high |
+| 300 | `max(logUNsun)`     | high |
+
 
