@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Assignment 04
 
 ```r
@@ -156,3 +157,8 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 | 210 | `max(logUNsun)`     | `quantile(avpctBCFE, 1)` |
 
 **O:** Plot the predicted values against the `logUNsun` values. You should plot a different line for each different value of `avpctBCFE`. You don't need to include a 95% confidence interval around these lines. Hint: Although now we are using the continuous instead of the categorical representation of the variable `avpctBCFE`, to plot different lines according to different values of `avpctBCFE`, you will need to define the variable as a `factor()` in the ggplot's aesthetics. 
+=======
+# Assignment_04
+
+Assignment instructions in the [README.Rmd](https://github.com/UW-POLS503/Assignment_04/edit/master/README.Rmd)
+>>>>>>> b7c60801f59afabaace95a4a78b9a0342cf13564
