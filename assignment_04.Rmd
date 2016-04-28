@@ -123,9 +123,9 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 
 **M:** Compare the coefficients to the `differences` you previously calculated. Can you now interpret the coefficients?
 
-**N:** Predict the following 300 scenarios:
+**N:** Keeping all the other covariates at their mean, use `mod3` to predict (+ 95% confidence interval) the following 300 scenarios. Hint: create a new dataset (`scenarios2`) containing the information of all these scenarios and use it for the `newdata` argument in the `predict()` function. 
 
-| # | `logUNsun`     |     `avpctBCFE` |
+| # | `logUNsun`     |     `avpctBCFEcat3` |
 |:----|:---------|:-------|
 | 1 |`min(logUNsun)`     | low |
 | ... | ...     | low |
@@ -136,3 +136,23 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 | 201 |`min(logUNsun)`     | high |
 | ... | ...     | high |
 | 300 | `max(logUNsun)`     | high |
+
+**O:** Plot the predicted values against the `logUNsun` values. You should plot 3 lines, one for each group of `avpctBCFEcat3` (low, medium, high). You should also include a 95% confidence interval around each line. Hint: You need to merge first the dataset `scenarios2` with the resulting dataset from the predictions. 
+
+**P:** Explain in your own words what the plot is showing.
+
+**N:** Keeping all the other covariates at their mean, use now `mod1` (where `avpctBCFE` is contious and not categorical) to predict (+ 95% confidence interval) the following 110 scenarios. Hint: create a new dataset (`scenarios3`) containing the information of all these scenarios and use it for the `newdata` argument in the `predict()` function.
+
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 |`min(logUNsun)`     | `quantile(avpctBCFE, 0.0)` |
+| ... | ...     | `quantile(avpctBCFE, 0.0)` |
+| 10 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.0)` |
+| 11 |`min(logUNsun)`     | `quantile(avpctBCFE, 0.05)` |
+| ... | ...     | `quantile(avpctBCFE, 0.05)` |
+| 20 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.5)` |
+| 201 |`min(logUNsun)`     | `quantile(avpctBCFE, 1)` |
+| ... | ...     | `quantile(avpctBCFE, 1)` |
+| 210 | `max(logUNsun)`     | `quantile(avpctBCFE, 1)` |
+
+**O:** Plot the predicted values against the `logUNsun` values. You should plot a different line for each different value of `avpctBCFE`. You don't need to include a 95% confidence interval around these lines. Hint: Although now we are using the continuous instead of the categorical representation of the variable `avpctBCFE`, to plot different lines according to different values of `avpctBCFE`, you will need to define the variable as a `factor()` in the ggplot's aesthetics. 

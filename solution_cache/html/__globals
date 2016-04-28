@@ -10,3 +10,7 @@ unnamed-chunk-10	[<-	c	data.frame	db	for	mean	mod3	predict	rep
 unnamed-chunk-11	pred_scenarios
 unnamed-chunk-12	data.frame	dif1	dif2	dif3	dif4	dif5	dif6	dif7
 unnamed-chunk-13	c	mod3	nrow	tidy
+unnamed-chunk-14	[<-	$	c	controls	data.frame	db	for	max	mean	min	mod3	predict	rep	seq
+unnamed-chunk-15	aes	avpctBCFEcat3	cbind	fit	geom_line	geom_ribbon	ggplot	logUNsun	lwr	pred_scenarios2	scenarios2	upr
+unnamed-chunk-16	[<-	$	as.vector	controls	data.frame	db	for	max	mean	min	mod1	predict	quantile	rep	sapply	seq
+unnamed-chunk-17	aes	avpctBCFE	cbind	factor	fit	geom_line	ggplot	logUNsun	lwr	pred_scenarios3	scenarios3	upr

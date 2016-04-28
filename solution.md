@@ -6,7 +6,7 @@ Solutions
 knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 
-Libraries Used
+## Libraries Used
 
 ```r
 library("pols503")
@@ -17,14 +17,14 @@ library("broom")
 library("xtable")
 ```
 
-# Data
+## Data
 
 
 ```r
 db <- import("TradeConflict.dta")
 ```
 
-# Model 1
+## Model
 
 This model is similar to their Model 1 in Table 1 (p. 676):
 
@@ -34,6 +34,8 @@ mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
               lnrgdpab + lndist + logUNsun * avpctBCFE, 
            data = db)
 ```
+
+## Questions
 
 **A:** Create a new variable `avpctBCFEcat3` by splitting the variable `avpctBCFE` into 3 categories. 
 
@@ -94,7 +96,7 @@ mod3 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island +
 
 **H:** Keeping all the control variables at their means, calculate the predicted values for the following scenarios:
 
-| # | `logUNsun`     |     `avpctBCFE` |
+| # | `logUNsun`     |     `avpctBCFEcat3` |
 |:----|:---------|:-------|
 | 1 | 0     | low |
 | 2 | 1     | low |
@@ -120,11 +122,11 @@ pred_scenarios <- predict(mod3, newdata = scenarios)
 
 **I:** Calculate the following:
 
-    - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFE` == low) - (`logUNsun` == 0 & `avpctBCFE` == low).
-    - `dif2`: Difference between the predicted values of scenarios 4 and 3: (`logUNsun` == 1 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == medium).
-    - `dif3`: Difference between the predicted values of scenarios 6 and 5: (`logUNsun` == 1 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == high).
-    - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFE` == medium) - (`logUNsun` == 0 & `avpctBCFE` == low).
-    - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFE` == high) - (`logUNsun` == 0 & `avpctBCFE` == low).
+    - `dif1`: Difference between the predicted values of scenarios 2 and 1: (`logUNsun` == 1 & `avpctBCFEcat3` == low) - (`logUNsun` == 0 & `avpctBCFEcat3` == low).
+    - `dif2`: Difference between the predicted values of scenarios 4 and 3: (`logUNsun` == 1 & `avpctBCFEcat3` == medium) - (`logUNsun` == 0 & `avpctBCFEcat3` == medium).
+    - `dif3`: Difference between the predicted values of scenarios 6 and 5: (`logUNsun` == 1 & `avpctBCFEcat3` == high) - (`logUNsun` == 0 & `avpctBCFEcat3` == high).
+    - `dif4`: Difference between the predicted values of scenarios 3 and 1: (`logUNsun` == 0 & `avpctBCFEcat3` == medium) - (`logUNsun` == 0 & `avpctBCFEcat3` == low).
+    - `dif5`: Difference between the predicted values of scenarios 5 and 1: (`logUNsun` == 0 & `avpctBCFEcat3` == high) - (`logUNsun` == 0 & `avpctBCFEcat3` == low).
     - `dif6`: Difference between `dif2` and `dif1`.
     - `dif7`: Difference between `dif3` and `dif1`.
     
@@ -141,13 +143,13 @@ dif7 <- dif3 - dif1
  
 **J:** Explain in your own words what do all these differences represent.
 
-  - `dif1`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == low.
-  - `dif2`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == medium.
-  - `dif3`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFE` == high.
-  - `dif4`: The difference in `lnrtrade` between dyads where `avpctBCFE` is low and dyads where `avpctBCFE` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
-  - `dif5`: The difference in `lnrtrade` between dyads where `avpctBCFE` is low and dyads where `avpctBCFE` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
-  - `dif6`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFE` is medium and `avpctBCFE` is low 
-  - `dif7`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFE` is high and `avpctBCFE` is low 
+  - `dif1`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFEcat3` == low.
+  - `dif2`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFEcat3` == medium.
+  - `dif3`: The slope of `lnrtrade ~ logUNsun` when we only consider dyads where `avpctBCFEcat3` == high.
+  - `dif4`: The difference in `lnrtrade` between dyads where `avpctBCFEcat3` is low and dyads where `avpctBCFEcat3` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
+  - `dif5`: The difference in `lnrtrade` between dyads where `avpctBCFEcat3` is low and dyads where `avpctBCFEcat3` is high, when there is no conflicting interests between the countries (`logUNsun` == 0).
+  - `dif6`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFEcat3` is medium and `avpctBCFEcat3` is low 
+  - `dif7`: The difference between the slopes of `lntrade ~ logUnsun` when `avpctBCFEcat3` is high and `avpctBCFEcat3` is low 
   
 **K:** Create a dataset (`differences`) with all these differences
 
@@ -194,9 +196,9 @@ regtab3
 
 **M:** Compare the coefficients to the `differences` you previously calculated. Can you now interpret the coefficients?
 
-**N:** Predict the following 300 scenarios:
+**N:** Keeping all the other covariates at their mean, use `mod3` to predict (+ 95% confidence interval) the following 300 scenarios. Hint: create a new dataset (`scenarios2`) containing the information of all these scenarios and use it for the `newdata` argument in the `predict()` function. 
 
-| # | `logUNsun`     |     `avpctBCFE` |
+| # | `logUNsun`     |     `avpctBCFEcat3` |
 |:----|:---------|:-------|
 | 1 |`min(logUNsun)`     | low |
 | ... | ...     | low |
@@ -207,5 +209,74 @@ regtab3
 | 201 |`min(logUNsun)`     | high |
 | ... | ...     | high |
 | 300 | `max(logUNsun)`     | high |
+
+
+```r
+scenarios2 <- data.frame(logUNsun = rep(seq(min(db$logUNsun, na.rm = TRUE),
+                                            max(db$logUNsun, na.rm = TRUE),
+                                            length.out = 100), 3),
+                        avpctBCFEcat3 = c(rep("low", 100), rep("medium", 100),
+                                      rep("high", 100)))
+for (var in controls) {
+  scenarios2[,var] <- mean(db[,var], na.rm = TRUE)
+}
+pred_scenarios2 <- predict(mod3, newdata = scenarios2, interval = "confidence")
+```
+
+**O:** Plot the predicted values against the `logUNsun` values. You should plot 3 lines, one for each group of `avpctBCFEcat3` (low, medium, high). You should also include a 95% confidence interval around each line. Hint: You need to merge first the dataset `scenarios2` with the resulting dataset from the predictions. 
+
+
+```r
+pred2_dataset <- cbind(scenarios2, pred_scenarios2)
+ggplot(pred2_dataset, aes(x = logUNsun, y = fit, ymin = lwr, ymax = upr,
+                          fill = avpctBCFEcat3)) +
+  geom_line() +
+  geom_ribbon(alpha = 0.5)
+```
+
+![](solution_files/figure-html/unnamed-chunk-15-1.png)
+
+**P:** Explain in your own words what the plot is showing.
+
+**N:** Keeping all the other covariates at their mean, use now `mod1` (where `avpctBCFE` is contious and not categorical) to predict (+ 95% confidence interval) the following 110 scenarios. Hint: create a new dataset (`scenarios3`) containing the information of all these scenarios and use it for the `newdata` argument in the `predict()` function.
+
+| # | `logUNsun`     |     `avpctBCFE` |
+|:----|:---------|:-------|
+| 1 |`min(logUNsun)`     | `quantile(avpctBCFE, 0.0)` |
+| ... | ...     | `quantile(avpctBCFE, 0.0)` |
+| 10 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.0)` |
+| 11 |`min(logUNsun)`     | `quantile(avpctBCFE, 0.05)` |
+| ... | ...     | `quantile(avpctBCFE, 0.05)` |
+| 20 | `max(logUNsun)`     | `quantile(avpctBCFE, 0.5)` |
+| 201 |`min(logUNsun)`     | `quantile(avpctBCFE, 1)` |
+| ... | ...     | `quantile(avpctBCFE, 1)` |
+| 210 | `max(logUNsun)`     | `quantile(avpctBCFE, 1)` |
+
+
+```r
+scenarios3 <- data.frame(logUNsun = rep(seq(min(db$logUNsun, na.rm = TRUE),
+                                            max(db$logUNsun, na.rm = TRUE),
+                                            length.out = 10), 21),
+                        avpctBCFE = as.vector(sapply(quantile(db$avpctBCFE, 
+                                                              seq(0, 1, 0.05)),
+                                                     function(x) rep(x, 10))))
+for (var in controls) {
+  scenarios3[,var] <- mean(db[,var], na.rm = TRUE)
+}
+pred_scenarios3 <- predict(mod1, newdata = scenarios3, interval = "confidence")
+```
+
+**O:** Plot the predicted values against the `logUNsun` values. You should plot a different line for each different value of `avpctBCFE`. You don't need to include a 95% confidence interval around these lines. Hint: Although now we are using the continuous instead of the categorical representation of the variable `avpctBCFE`, to plot different lines according to different values of `avpctBCFE`, you will need to define the variable as a `factor()` in the ggplot's aesthetics. 
+
+
+```r
+pred3_dataset <- cbind(scenarios3, pred_scenarios3)
+ggplot(pred3_dataset, aes(x = logUNsun, y = fit, ymin = lwr, ymax = upr,
+                          fill = factor(avpctBCFE))) +
+  geom_line()
+```
+
+![](solution_files/figure-html/unnamed-chunk-17-1.png)
+
 
 
