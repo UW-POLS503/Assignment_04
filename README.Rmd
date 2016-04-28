@@ -1,6 +1,10 @@
-# Assignment 04
-
-```r
+---
+title: "Assignment 04"
+output:
+  html_document:
+    keep_md: true
+---
+```{r}
 knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 
@@ -19,8 +23,7 @@ To update your fork from the upstream repository:
 
 # Libraries used 
 
-
-```r
+```{r message=FALSE}
 library("pols503")
 library("rio")
 library("ggplot2")
@@ -28,8 +31,7 @@ library("dplyr")
 library("broom")
 ```
 If you do not have the **pols503** package installed, you can install it with,
-
-```r
+```{r eval=FALSE}
 library("devtools")
 install_github("UW-POLS503/r-pols503")
 ```
@@ -44,8 +46,7 @@ In this assignment we will use replication data for Kastner's (2007) ["When Do C
 
 Use the `import()` function of the `rio` package to import the STATA file `TradConflict.dta`. The file contains 74,415 rows and 43 columns/variables. Each row contains information about a country pair or dyad. The authors built the dataset using information from 76 countries from 1960 to 1992. 
 
-
-```r
+```{r}
 db <- import("TradeConflict.dta")
 ```
 
@@ -70,8 +71,7 @@ Independent Variables of interest:
 $Trade = \beta_{0} + \beta_{c}Conflict + \beta_{b} TradeBarriers + \beta_{cb}(Conflict \times TradeBarriers) + \beta Controls + \epsilon$ 
 
 This model is similar to their Model 1 in Table 1 (p. 676):
-
-```r
+```{r}
 mod1 <- lm(lnrtrade ~ lnrpciab + avremote + landlocked + island + 
               landratio + pciratio + jointdem + laglnrtrade +
               lnrgdpab + lndist + logUNsun * avpctBCFE, 
